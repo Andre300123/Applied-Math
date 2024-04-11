@@ -1,0 +1,78 @@
+# intergal method which include Euler's forward method (def forward), Centeral midpoint method, and the trapizoid method.
+import numpy
+ 
+def fct(x):
+    return numpy.exp(x)
+     
+def forward (f, t, h):
+    return ((f(t+h) - f(t)) / h)
+forward(fct, 10, 10.0e-5)
+
+import numpy
+ 
+def fct(x):
+    return numpy.exp(x)
+     
+def central (f, t, h):
+    return ((f(t+h) - f(t-h)) / (2.0*h))
+central(fct, 10, 10.0e-5)
+
+import numpy
+import math
+def get_stencil_midpoint_rule(a,b):
+    x_vec = [(b+a)/2]
+    h = (b-a)
+    w_vec = [h]
+    return x_vec, w_vec
+#set problem parameters and exact solution
+
+a = -1.0
+b = 1.0
+exact_int = 2.3
+
+#MIDPOINT RULE
+print("MIDPOINT Rule")
+x_vec, w_vec = get_stencil_midpoint_rule(a,b)
+print("nodes", x_vec)
+print("weights", w_vec)
+f_vec = f(x_vec)
+
+print("function values at nodes", f_vec)
+#can call w_vec numpy.array(w_vec) if it doesn't work, same for f_vec
+approx_int = numpy.dot(w_vec, f_vec)
+print("approximate integral value", approx_int)
+print("Relative Error: ", (exact_int-approx_int)/exact_int)
+
+import scipy.integrate as spi
+import numpy as np
+def trapz(f,a,b,N=50):
+    x = np.linspace(a,b,N+1) # N+1 points make N subintervals
+    y = f(x)
+    y_right = y[1:] # right endpoints
+    y_left = y[:-1] # left endpoints
+    dx = (b - a)/N
+    T = (dx/2) * np.sum(y_right + y_left)
+    return T
+
+
+f = lambda x : np.exp(x)
+a = -1; b = 1; N = 8
+
+# x and y values for the trapezoid rule
+x = np.linspace(a,b,N+1)
+y = f(x)
+
+# X and Y values for plotting y=f(x)
+X = np.linspace(a,b,100)
+Y = f(X)
+plt.plot(X,Y)
+
+for i in range(N):
+    xs = [x[i],x[i],x[i+1],x[i+1]]
+    ys = [0,f(x[i]),f(x[i+1]),0]
+    plt.fill(xs,ys,'b',edgecolor='b',alpha=0.2)
+
+plt.title('Trapezoid Rule, N = {}'.format(N))
+plt.show()
+T = trapz(f,a,b,N)
+print(T)
